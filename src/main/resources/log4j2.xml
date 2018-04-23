@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <properties>
+        <property name="logPath">logs</property>
+        <property name="logFileName">info.log</property>
+    </properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] (%t) %F:%L - %m%n"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+        <RollingFile name="InfoRollingFile" fileName="${logPath}/${logFileName}" filePattern="${logPath}/${logFileName}.%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] (%t) %F:%L - %m%n" />
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <TimeBasedTriggeringPolicy />
+            <DefaultRolloverStrategy>
+                <Delete basePath="${logPath}" maxDepth="2" >
+                    <IfFileName glob="${logFileName}.*.gz"/>
+                    <IfLastModified age="10d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="InfoRollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
